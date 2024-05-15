@@ -1,0 +1,54 @@
+return {
+  {
+    'SmiteshP/nvim-navic',
+    dependencies = { 'neovim/nvim-lspconfig' },
+    lazy = false,
+    priority = 1000,
+  },
+  {
+    'VonHeikemen/lsp-zero.nvim',
+    branch = 'v3.x',
+    lazy = true,
+    config = false,
+    init = function()
+      -- Disable automatic setup, we are doing it manually
+      vim.g.lsp_zero_extend_cmp = 0
+      vim.g.lsp_zero_extend_lspconfig = 0
+    end,
+  },
+  {
+    'williamboman/mason.nvim',
+    lazy = false,
+    config = true,
+    opts = {
+      ui = { border = 'double' },
+    },
+  },
+  -- LSP
+  {
+    'neovim/nvim-lspconfig',
+    cmd = { 'LspInfo', 'LspInstall', 'LspStart' },
+    event = { 'BufReadPre', 'BufNewFile' },
+    dependencies = {
+      { 'williamboman/mason-lspconfig.nvim' },
+    },
+    config = function()
+      local lspZero = require 'lsp-zero'
+      lspZero.extend_lspconfig()
+      lspZero.on_attach(function(client, bufnr)
+        -- nvim-navic
+        if client.server_capabilities.documentSymbolProvider then
+          local navic = require 'nvim-navic'
+          navic.attach(client, bufnr)
+        end
+        lspZero.default_keymaps { buffer = bufnr }
+      end)
+      require('mason-lspconfig').setup {
+        ensure_installed = { 'lua_ls', 'gopls' },
+        handlers = {
+          lspZero.default_setup,
+        },
+      }
+    end,
+  },
+}
