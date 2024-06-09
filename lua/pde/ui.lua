@@ -1,3 +1,5 @@
+local cfg = require('config.keymap.plugin')
+
 return {
   {
     'ellisonleao/gruvbox.nvim',
@@ -38,7 +40,7 @@ return {
         override_vim_notify = true, -- Automatically override vim.notify() with Fidget
         window = {
           normal_hl = 'Operator',
-          border = 'rounded',
+          -- border = 'rounded',
         },
       },
     },
@@ -48,23 +50,23 @@ return {
     cmd = { 'Vista' },
     init = function()
       vim.g.vista_ctags_cmd = { go = 'gotags' }
-      vim.keymap.set('n', '<leader>vv', ':Vista!!<CR>')
+      cfg.vista.setupKeyboard()
     end,
   },
   {
     'stevearc/oil.nvim',
     opts = {},
     cmd = { 'Oil' },
-    keys = {
-      { '-', '<cmd>Oil<cr>', desc = 'Open parent directory' },
-    },
-    -- Optional dependencies
+    init = function()
+			cfg.oil.setupKeyboard()
+		end,
     dependencies = { 'nvim-tree/nvim-web-devicons' },
   },
   {
     'feline-nvim/feline.nvim',
     lazy = false,
     config = function()
+			vim.opt.termguicolors = true
       require('feline').setup()
     end,
   },
@@ -75,33 +77,7 @@ return {
     init = function()
       local harpoon = require 'harpoon'
       harpoon:setup()
-      vim.keymap.set('n', '<leader>a', function()
-        harpoon:list():add()
-      end)
-      vim.keymap.set('n', '<C-e>', function()
-        harpoon.ui:toggle_quick_menu(harpoon:list())
-      end)
-
-      vim.keymap.set('n', '<A-m>', function()
-        harpoon:list():select(1)
-      end)
-      vim.keymap.set('n', '<A-w>', function()
-        harpoon:list():select(2)
-      end)
-      vim.keymap.set('n', '<A-v>', function()
-        harpoon:list():select(3)
-      end)
-      vim.keymap.set('n', '<A-z>', function()
-        harpoon:list():select(4)
-      end)
-
-      -- Toggle previous & next buffers stored within Harpoon list
-      vim.keymap.set('n', '<A-h>', function()
-        harpoon:list():prev()
-      end)
-      vim.keymap.set('n', '<A-l>', function()
-        harpoon:list():next()
-      end)
+			cfg.harpoon.setupKeyboard()
     end,
   },
 }

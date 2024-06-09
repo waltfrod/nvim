@@ -18,6 +18,8 @@ local function header()
   ]]
 end
 
+local cfg = require('config.keymap.plugin')
+
 return {
   {
     'williamboman/mason.nvim',
@@ -27,72 +29,20 @@ return {
       ui = { border = 'double' },
     },
   },
+	{'kylechui/nvim-surround'},
+	{
+    "DaikyXendo/nvim-material-icon",
+  },
   {
     'echasnovski/mini.nvim',
     version = false,
     init = function()
-      require('mini.clue').setup {
-        triggers = {
-          -- Leader triggers
-          { mode = 'n', keys = '<Leader>' },
-          { mode = 'x', keys = '<Leader>' },
-          -- Built-in completion
-          { mode = 'i', keys = '<C-x>' },
-
-          -- `g` key
-          { mode = 'n', keys = 'g' },
-          { mode = 'x', keys = 'g' },
-
-          -- Marks
-          { mode = 'n', keys = "'" },
-          { mode = 'n', keys = '`' },
-          { mode = 'x', keys = "'" },
-          { mode = 'x', keys = '`' },
-
-          -- Registers
-          { mode = 'n', keys = '"' },
-          { mode = 'x', keys = '"' },
-          { mode = 'i', keys = '<C-r>' },
-          { mode = 'c', keys = '<C-r>' },
-
-          -- Window commands
-          { mode = 'n', keys = '<C-w>' },
-        },
-
-        clues = {
-          { mode = 'n', keys = '<Leader>f', desc = 'Find' },
-          { mode = 'n', keys = '<Leader>w', desc = 'NVim' },
-          { mode = 'n', keys = '<Leader>v', desc = 'Vimux' },
-          { mode = 'n', keys = '<Leader>q', desc = 'NVim' },
-          function()
-            MiniClue.gen_clues.g()
-          end,
-          function()
-            MiniClue.gen_clues.builtin_completion()
-          end,
-          function()
-            MiniClue.gen_clues.marks()
-          end,
-          function()
-            MiniClue.gen_clues.registers()
-          end,
-          function()
-            MiniClue.gen_clues.windows()
-          end,
-          function()
-            MiniClue.gen_clues.z()
-          end,
-        },
-        window = {
-          delay = 300,
-        },
-      }
       require('mini.comment').setup {
         mappings = {
-          comment = 'gc', -- Toggle comment (like `gcip` - comment inner paragraph) for both Normal and Visual modes
-          comment_line = 'gcc', -- Toggle comment on current line
-          comment_visual = 'gc', -- Toggle comment on visual selection
-          textobject = 'gc', -- Define 'comment' textobject (like `dgc` - delete whole comment block)
+          comment = 'gc',
+          comment_line = 'gcc',
+          comment_visual = 'gc',
+          textobject = 'gc',
         },
       }
       local starter = require 'mini.starter'
@@ -116,9 +66,10 @@ return {
           signature = { border = 'rounded' },
         },
       }
-      vim.keymap.set('i', '<Tab>', [[pumvisible() ? "\<C-n>" : "\<Tab>"]], { expr = true })
-      vim.keymap.set('i', '<S-Tab>', [[pumvisible() ? "\<C-p>" : "\<S-Tab>"]], { expr = true })
+			cfg.autocomplete.setupKeyboard()
 
+      require('mini.notify').setup()
+      require('mini.git').setup()
       require('mini.jump').setup()
       require('mini.jump2d').setup {
         -- Characters used for labels of jump spots (in supplied order)
@@ -131,56 +82,13 @@ return {
     end,
   },
   {
-    'mhartington/formatter.nvim',
-    lazy = false,
-    config = function()
-      require('formatter').setup {
-        logging = false,
-        filetype = { -- Settings by File Types
-          lua = require('formatter.filetypes.lua').stylua,
-          go = require('formatter.filetypes.go').goimports,
-          --[[
-         function()
-            return {
-              exe = 'golines',
-              args = {
-                '--base-formatter="goimports"',
-              },
-              stdin = true,
-            }
-          end,
-        --]]
-          javascript = require('formatter.filetypes.javascript').prettierd,
-          html = require('formatter.filetypes.html').prettierd,
-          css = require('formatter.filetypes.css').prettierd,
-          json = require('formatter.filetypes.json').jq,
-          sql = require('formatter.filetypes.sql').pgformat,
-          ['*'] = {
-            require('formatter.filetypes.any').remove_trailing_whitespace,
-          },
-        },
-      }
-    end,
-  },
-  {
     'ibhagwan/fzf-lua',
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    dependencies = { 'DaikyXendo/nvim-material-icon' },
     event = 'VeryLazy',
     config = function(_, opts)
       -- calling `setup` is optional for customization
       require('fzf-lua').setup(opts)
-      local keymap = vim.keymap.set
-      keymap('n', '<leader>ff', '<cmd>FzfLua files<CR>', { desc = 'Files' })
-      keymap('n', '<leader>fb', '<cmd>FzfLua buffers<CR>', { desc = 'Buffers' })
-      keymap('n', '<leader>fh', '<cmd>FzfLua oldfiles<CR>', { desc = 'History' })
-      keymap('n', '<leader>fl', '<cmd>FzfLua blines<CR>', { desc = 'Lines in buffer' })
-      keymap('n', '<leader>fs', '<cmd>FzfLua live_grep<CR>', { desc = 'Live search' })
-      keymap('n', '<leader>ft', '<cmd>FzfLua btags<CR>', { desc = 'Tags in buffer' })
-      keymap('n', '<leader>fc', '<cmd>FzfLua git_commits<CR>', { desc = 'Git commits' })
-      keymap('n', '<leader>fa', '<cmd>FzfLua help_tags<CR>', { desc = 'Neovim help' })
-      keymap('n', '<leader>fm', '<cmd>FzfLua marks<CR>', { desc = 'Marks' })
-      keymap('n', '<leader>fj', '<cmd>FzfLua jumps<CR>', { desc = 'Jumps' })
-      keymap('n', '<leader>fk', '<cmd>FzfLua keymaps<CR>', { desc = 'Keymaps' })
+			cfg.fzf.setupKeyboard()
     end,
   },
   {
@@ -188,7 +96,7 @@ return {
     version = '*',
     lazy = false,
     dependencies = {
-      'nvim-tree/nvim-web-devicons',
+      'DaikyXendo/nvim-material-icon',
     },
     config = function()
       require('nvim-tree').setup {
@@ -200,17 +108,14 @@ return {
           },
         },
       }
-      vim.keymap.set('n', '<F12>', '<cmd>NvimTreeToggle<CR>')
+      cfg.ntree.setupKeyboard()
     end,
   },
   {
     'preservim/vimux',
     lazy = false,
     config = function()
-      local keymap = vim.keymap.set
-      keymap('n', '<leader>vl', '<cmd>VimuxRunLastCommand<CR>')
-      keymap('n', '<leader>vp', '<cmd>VimuxPromptCommand<CR>')
-      keymap('n', '<leader>vc', '<cmd>VimuxInterruptRunner<CR>')
+			cfg.vimux.setupKeyboard()
     end,
   },
   {
@@ -218,7 +123,7 @@ return {
     lazy = false,
     config = function()
       vim.g.easy_align_bypass_fold = 1
-      vim.keymap.set({ 'n', 'x' }, 'ga', '<Plug>(EasyAlign)')
+      cfg.easyalign.setupKeyboard()
     end,
   },
   {
@@ -232,16 +137,20 @@ return {
     opts = {
       sync_install = false,
       ensure_installed = {
-        'lua',
-        'go',
-        'html',
-        'css',
-        'javascript',
-        'typescript',
-        'markdown',
-        'vim',
-        'vimdoc',
-        'json',
+				'lua',
+				'go',
+				'html',
+				'xml',
+				'css',
+				'javascript',
+				'typescript',
+				'markdown',
+				'vim',
+				'yaml',
+				'toml',
+				'latex',
+				'vimdoc',
+				'json',
       },
       highlight = { enable = true },
       indent = { enable = true },
@@ -285,21 +194,95 @@ return {
     end,
   },
   {
-    'Exafunction/codeium.vim',
-    event = 'InsertEnter',
-      -- stylua: ignore
-      config = function ()
-        vim.g.codeium_disable_bindings = 1
-        local keymap = vim.keymap.set
-        keymap("i", "<A-g>", function() return vim.fn["codeium#Accept"]() end, { expr = true })
-        keymap("i", "<A-c>", function() return vim.fn["codeium#CycleCompletions"](1) end, { expr = true })
-        keymap("i", "<A-h>", function() return vim.fn["codeium#CycleCompletions"](-1) end, { expr = true })
-        keymap("i", "<A-l>", function() return vim.fn["codeium#Clear"]() end, { expr = true })
-        keymap("i", "<A-s>", function() return vim.fn["codeium#Complete"]() end, { expr = true })
-      end,
+    'monkoose/neocodeium',
+    event = 'VeryLazy',
+    config = function()
+      local neo = require 'neocodeium'
+      neo.setup()
+			cfg.codeium.setupKeyboard()
+    end,
   },
   {
-    'hjson/vim-hjson',
-    ft = { 'hjson', 'hj' },
+    'mattn/emmet-vim',
+    -- lazy = false,
+    ft = { 'css', 'html', 'html4', 'xhtml', 'haml', 'htmldjango', 'xml', 'xsd' },
+    -- event = 'BufEnter *.css,*.html,*.html4,*.xhtml,*.haml,*.twig,*.xml,*.xsd',
+    init = function()
+      vim.g.user_emmet_leader_key = ','
+      vim.g.user_emmet_settings = {
+        variables = { lang = 'es' },
+        html = {
+          snippets = {
+            html = '<!DOCTYPE html>\n'
+              .. '<html lang="es">\n'
+              .. '\t<head>\n'
+              .. '\t\t<meta charset="${charset}">\n'
+              .. '\t\t<title></title>\n'
+              .. '\t\t<meta name="viewport" content="width=device-width, initial-scale=1.0">\n'
+              .. '\t</head>\n'
+              .. '\t<body>\n\t${child}\n</body>\n'
+              .. '</html>',
+          },
+        },
+      }
+    end,
   },
+	{
+		"folke/which-key.nvim",
+		event = "VeryLazy",
+		init = function()
+			vim.o.timeout = true
+			vim.o.timeoutlen = 300
+		end,
+		config = function(_, opts)
+			local wk = require("which-key")
+			wk.register({
+				["<leader>"] = {
+					["<leader>"] = "Save & Quit",
+					['b'] = 'Buffer',
+					['f'] = 'FzfLua',
+					['v'] = 'Vimux/Vista',
+				},
+			})
+			wk.setup(opts)
+		end,
+		opts = {
+			plugins = {
+				marks = true, -- shows a list of your marks on ' and `
+				registers = true, -- shows your registers on " in NORMAL or <C-r> in INSERT mode
+				-- the presets plugin, adds help for a bunch of default keybindings in Neovim
+				-- No actual key bindings are created
+				spelling = {
+					enabled = true, -- enabling this will show WhichKey when pressing z= to select spelling suggestions
+					suggestions = 20, -- how many suggestions should be shown in the list?
+				},
+				presets = {
+					operators = true, -- adds help for operators like d, y, ...
+					motions = true, -- adds help for motions
+					text_objects = true, -- help for text objects triggered after entering an operator
+					windows = true, -- default bindings on <c-w>
+					nav = true, -- misc bindings to work with windows
+					z = true, -- bindings for folds, spelling and others prefixed with z
+					g = true, -- bindings for prefixed with g
+				},
+			},
+		}
+	},
+	{
+		'akinsho/toggleterm.nvim',
+		version = '*',
+		lazy = false,
+		opts = {
+			direction = 'float',
+			close_on_exit = false,
+			float_opts = {
+				border = 'curved',
+				title_pos = 'left',
+			},
+		},
+	},
+	{
+		'hjson/vim-hjson',
+		ft = { 'hjson', 'hj' },
+	},
 }
