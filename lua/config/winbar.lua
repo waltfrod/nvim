@@ -63,7 +63,7 @@ local colors = {
   one_bg2 = '#363e44',
   one_bg3 = '#3a4248',
   telescope_bg = '#3a4248',
-  grey = '#4a5258',
+  grey = '#282828',
   grey_fg = '#50585e',
   grey_fg2 = '#5e666c',
   light_grey = '#61696f',
@@ -102,8 +102,8 @@ function get_buf_option(opt)
 end
 
 vim.api.nvim_set_hl(0, 'WinBarSeparator', { fg = colors.grey })
-vim.api.nvim_set_hl(0, 'WinBarFilename', { fg = colors.green, bg = colors.grey })
-vim.api.nvim_set_hl(0, 'WinBarContext', { fg = colors.green, bg = colors.grey })
+vim.api.nvim_set_hl(0, 'WinBarFilename', { fg = colors.purple, bg = colors.grey })
+vim.api.nvim_set_hl(0, 'WinBarContext', { fg = colors.purple, bg = colors.grey })
 
 M.winbar_filetype_exclude = {
   'help',
@@ -159,20 +159,20 @@ end
 
 function M.get_winbar()
   if excludes() then
-    return ''
+    return ''
   end
   if navic.is_available() then
-    return '%#WinBarSeparator#'
+    return ' %#WinBarSeparator#'
       --.. "%="
       .. '█'
       .. '%*'
       .. get_modified()
       .. get_location()
       .. '%#WinBarSeparator#'
-      .. ''
+      .. '█'
       .. '%*'
   else
-    return '%#WinBarSeparator#' .. '%=' .. '' .. '%*' .. get_modified() .. '%#WinBarSeparator#' .. '' .. '%*'
+    return ' %#WinBarSeparator#' .. '█' .. '%*' .. get_modified() .. '%#WinBarSeparator#' .. '█' .. '%*'
   end
 end
 
