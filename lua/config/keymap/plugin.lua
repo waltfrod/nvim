@@ -24,20 +24,6 @@ M.fzf = {
 	end,
 }
 
-M.ntree = {
-	setupKeyboard = function()
-		local tree = require('nvim-tree.api')
-		nvmap('n', '<F12>', function()
-			tree.tree.toggle({
-				path = '<args>',
-				find_file = false,
-				update_root = false,
-				focus = true,
-			})
-		end, { desc = 'Toggle Ntree' })
-	end,
-}
-
 M.vimux = {
 	setupKeyboard = function()
 		nvmap('n', '<leader>vl', '<cmd>VimuxRunLastCommand<CR>', { desc = 'Run last command' })
@@ -114,4 +100,5 @@ M.harpoon = {
 		end, { desc = 'Next harpoon' })
 	end,
 }
+
 return M
