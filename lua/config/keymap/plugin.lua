@@ -65,9 +65,30 @@ M.vista = {
 	end,
 }
 
-M.oil = {
+M.netrw = {
 	setupKeyboard = function()
-		nvmap('n', '-', '<cmd>Oil<CR>', { desc = 'Toggle Oil file browser' })
+		nvmap('n', '-', '<cmd>Explore<CR>', { desc = 'Toggle Netrw file browser' })
+	end,
+	setupNavigate = function()
+		nvmap('n', 'H', 'u', { desc = 'Back history', buffer = true })
+		nvmap('n', 'h', '-^', { desc = 'Up dir', buffer = true })
+		nvmap('n', 'q', '<cmd>bd<CR>', { desc = 'Close', buffer = true })
+		nvmap('n', '.', 'gh', { desc = 'Show/Hidde hidden files', buffer = true })
+		nvmap('n', '<Tab>', 'mf', { desc = 'Mark', buffer = true })
+		nvmap('n', '<S-Tab>', 'mF', { desc = 'Unmark', buffer = true })
+		nvmap('n', '<leader><Tab>', 'mu', { desc = 'Unmark All', buffer = true })
+		nvmap('n', 'ff', '%', { desc = 'New buffer', buffer = true })
+		nvmap('n', 'fe', 'R', { desc = 'Rename file', buffer = true })
+		nvmap('n', 'fc', 'mc', { desc = 'Copy mark file', buffer = true })
+		nvmap('n', 'fC', 'mtmc', { desc = 'Copy mark file', buffer = true })
+		nvmap('n', 'fx', 'mm', { desc = 'Move mark file', buffer = true })
+		nvmap('n', 'fX', 'mtmm', { desc = 'Move mark file', buffer = true })
+		nvmap('n', 'fl', function()
+			print(vim.fn.join(vim.call('netrw#Expose', 'netrwmarkfilelist'), '\n'))
+		end, { desc = 'List marks', buffer = true })
+		nvmap('n', 'fq', function()
+			print(vim.call('netrw#Expose', 'netrwftgt'))
+		end, { desc = 'Show target', buffer = true })
 	end,
 }
 
@@ -98,6 +119,21 @@ M.harpoon = {
 		nvmap('n', '<A-d>', function()
 			harpoon:list():next()
 		end, { desc = 'Next harpoon' })
+	end,
+}
+
+M.toggleterm = {
+	setupKeyboard = function()
+		local term = require('config.terminal')
+		nvmap('n', '<leader>xb', function()
+			term.Shell()
+		end, { desc = 'Bash shell' })
+		nvmap('n', '<leader>xp', function()
+			term.ProjectInfo()
+		end, { desc = 'Tokei - Project info' })
+		nvmap('n', '<leader>xs', function()
+			term.ProjectInfo()
+		end, { desc = 'StackOverflow Search' })
 	end,
 }
 
