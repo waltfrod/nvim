@@ -103,23 +103,6 @@ return {
 			cfg.vimux.setupKeyboard()
 		end,
 	},
-	-- {
-	-- 	'preservim/nerdtree',
-	-- 	dependencies = {
-	-- 		'ryanoasis/vim-devicons',
-	-- 		'Xuyuanp/nerdtree-git-plugin',
-	-- 	},
-	-- 	lazy = false,
-	-- 	config = function()
-	-- 		vim.g.webdevicons_enable = 1
-	-- 		vim.g.webdevicons_enable_nerdtree = 1
-	-- 		vim.g.NERDTreeGitStatusUseNerdFonts = 1
-	-- 		vim.g.NERDTreeDirArrowExpandable = '+'
-	-- 		vim.g.NERDTreeDirArrowCollapsible = '-'
-	-- 		vim.g.NERDTreeQuitOnOpen = 1
-	-- 		cfg.nerdtree.setupKeyboard()
-	-- 	end,
-	-- },
 	{
 		'junegunn/vim-easy-align',
 		lazy = false,
@@ -244,6 +227,7 @@ return {
 					['b'] = 'Buffer',
 					['f'] = 'FzfLua/WindowZoom',
 					['v'] = 'Vimux/Vista',
+					['x'] = '3party apps',
 					['z'] = 'Folding',
 				},
 			})
@@ -275,14 +259,17 @@ return {
 		'akinsho/toggleterm.nvim',
 		version = '*',
 		lazy = false,
-		opts = {
-			direction = 'float',
-			close_on_exit = false,
-			float_opts = {
-				border = 'curved',
-				title_pos = 'left',
-			},
-		},
+		init = function()
+			require('toggleterm').setup({
+				direction = 'float',
+				close_on_exit = false,
+				float_opts = {
+					border = 'curved',
+					title_pos = 'left',
+				},
+			})
+			cfg.toggleterm.setupKeyboard()
+		end,
 	},
 	{
 		'hjson/vim-hjson',

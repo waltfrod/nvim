@@ -132,8 +132,11 @@ M.toggleterm = {
 			term.ProjectInfo()
 		end, { desc = 'Tokei - Project info' })
 		nvmap('n', '<leader>xs', function()
-			term.ProjectInfo()
+			term.StackOverflow()
 		end, { desc = 'StackOverflow Search' })
+		nvmap('n', '<leader>xm', function()
+			term.MC()
+		end, { desc = 'Midnight Commander' })
 	end,
 }
 

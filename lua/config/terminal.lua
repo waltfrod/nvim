@@ -2,8 +2,6 @@ local M = {}
 
 local Terminal = require('toggleterm.terminal').Terminal
 local cwd = vim.loop.cwd()
-local tui = require('utils.tui')
-local fileType = vim.api.nvim_buf_get_option(vim.api.nvim_get_current_buf(), 'filetype')
 
 local function launch(cmd, dir)
 	Terminal:new({
@@ -25,7 +23,7 @@ function M.Shell()
 end
 
 function M.MC()
-	launch('mc -b', cwd)
+	launch('mc -b ' .. cwd .. vim.fn.expand('~'), cwd)
 end
 
 function M.ProjectInfo()
@@ -33,9 +31,11 @@ function M.ProjectInfo()
 end
 
 function M.StackOverflow()
-	local val = vim.fn.input('StackOverflow search (' .. fileType .. ')', '', val)
+	local fileType = vim.bo.filetype
+	local val = vim.fn.input('StackOverflow search (' .. fileType .. ')', '')
 	if val == '' then
 		vim.notify('Empty search', vim.log.levels.ERROR)
+		print('')
 		return
 	end
 
