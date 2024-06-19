@@ -132,16 +132,6 @@ augroup END
 		end,
 	})
 
-	-- Netrw mappings
-	vim.api.nvim_create_augroup('netrw_mapping', { clear = true })
-	vim.api.nvim_create_autocmd('FileType', {
-		group = 'netrw_mapping',
-		pattern = 'netrw',
-		callback = function()
-			require('config.keymap.plugin').netrw.setupNavigate()
-		end,
-	})
-
 	-- No comentar nuevas líneas
 	vim.cmd([[au BufEnter * set fo-=c fo-=r fo-=o]])
 end

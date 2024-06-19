@@ -54,23 +54,31 @@ return {
 		end,
 	},
 	{
-		'prichrd/netrw.nvim',
+		'lmburns/lf.nvim',
 		lazy = false,
 		config = function()
-			require('netrw').setup({
-				icons = {
-					symlink = ' ',
-					directory = ' ',
-					file = ' ',
-				},
-				use_devicons = true,
+			local fn = vim.fn
+			-- This feature will not work if the plugin is lazy-loaded
+			vim.g.lf_netrw = 1
+
+			require('lf').setup({
+				escape_quit = false,
+				border = 'rounded',
+				height = fn.float2nr(fn.round(0.75 * vim.go.lines)), -- height of the *floating* window
+				width = fn.float2nr(fn.round(0.75 * vim.go.columns)), -- width of the *floating* window
 			})
 
-			vim.g.netrw_banner = 0
-			vim.cmd('hi! link netrwMarkFile Search')
-			cfg.netrw.setupKeyboard()
+			vim.keymap.set('n', '-', '<Cmd>Lf<CR>')
+
+			vim.api.nvim_create_autocmd({
+				event = 'User',
+				pattern = 'LfTermEnter',
+				callback = function(a)
+					vim.api.nvim_buf_set_keymap(a.buf, 't', 'q', 'q', { nowait = true })
+				end,
+			})
 		end,
-		dependencies = { 'nvim-tree/nvim-web-devicons' },
+		dependencies = { 'akinsho/toggleterm.nvim' },
 	},
 	{
 		'feline-nvim/feline.nvim',
