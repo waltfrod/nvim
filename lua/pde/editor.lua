@@ -73,7 +73,10 @@ return {
 			})
 			cfg.autocomplete.setupKeyboard()
 
-			require('mini.notify').setup()
+			local notify = require('mini.notify')
+			notify.setup()
+			local opts = { ERROR = { duration = 10000 } }
+			vim.notify = notify.make_notify(opts)
 			require('mini.git').setup()
 			require('mini.jump').setup()
 			require('mini.jump2d').setup({

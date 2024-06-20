@@ -37,7 +37,7 @@ return {
 			notification = {
 				filter = vim.log.levels.INFO, -- Minimum notifications level
 				history_size = 128, -- Number of removed messages to retain in history
-				override_vim_notify = true, -- Automatically override vim.notify() with Fidget
+				override_vim_notify = false, -- Automatically override vim.notify() with Fidget
 				window = {
 					normal_hl = 'Operator',
 					-- border = 'rounded',
@@ -70,8 +70,7 @@ return {
 
 			vim.keymap.set('n', '-', '<Cmd>Lf<CR>')
 
-			vim.api.nvim_create_autocmd({
-				event = 'User',
+			vim.api.nvim_create_autocmd({ 'User' }, {
 				pattern = 'LfTermEnter',
 				callback = function(a)
 					vim.api.nvim_buf_set_keymap(a.buf, 't', 'q', 'q', { nowait = true })
