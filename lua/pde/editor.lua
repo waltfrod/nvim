@@ -39,8 +39,8 @@ return {
 	},
 	{ 'DaikyXendo/nvim-material-icon' },
 	{
-		'echasnovski/mini.nvim',
-		version = false,
+		'echasnovski/mini.comment',
+		version = '*',
 		init = function()
 			require('mini.comment').setup({
 				mappings = {
@@ -50,6 +50,12 @@ return {
 					textobject = 'gc',
 				},
 			})
+		end,
+	},
+	{
+		'echasnovski/mini.starter',
+		version = '*',
+		init = function()
 			local starter = require('mini.starter')
 			starter.setup({
 				evaluate_single = true,
@@ -65,6 +71,19 @@ return {
 					starter.gen_hook.padding(3, 2),
 				},
 			})
+		end,
+	},
+	{
+		'echasnovski/mini.cursorword',
+		version = '*',
+		init = function()
+			require('mini.cursorword').setup()
+		end,
+	},
+	{
+		'echasnovski/mini.completion',
+		version = '*',
+		init = function()
 			require('mini.completion').setup({
 				window = {
 					info = { border = 'rounded' },
@@ -72,20 +91,45 @@ return {
 				},
 			})
 			cfg.autocomplete.setupKeyboard()
-
+		end,
+	},
+	{
+		'echasnovski/mini.notify',
+		version = '*',
+		init = function()
 			local notify = require('mini.notify')
 			notify.setup()
 			local opts = { ERROR = { duration = 10000 } }
 			vim.notify = notify.make_notify(opts)
-			require('mini.git').setup()
+		end,
+	},
+	{
+		'echasnovski/mini.jump',
+		version = '*',
+		init = function()
 			require('mini.jump').setup()
+		end,
+	},
+	{
+		'echasnovski/mini.jump2d',
+		version = '*',
+		init = function()
 			require('mini.jump2d').setup({
-				-- Characters used for labels of jump spots (in supplied order)
 				labels = 'aoeiudrtnspyfgchlbkxmj',
 			})
-			require('mini.cursorword').setup()
-			require('mini.surround').setup()
+		end,
+	},
+	{
+		'echasnovski/mini.pairs',
+		version = '*',
+		init = function()
 			require('mini.pairs').setup()
+		end,
+	},
+	{
+		'echasnovski/mini.tabline',
+		version = '*',
+		init = function()
 			require('mini.tabline').setup({ show_icons = true })
 		end,
 	},
@@ -192,9 +236,7 @@ return {
 	},
 	{
 		'mattn/emmet-vim',
-		-- lazy = false,
 		ft = { 'css', 'html', 'html4', 'xhtml', 'haml', 'htmldjango', 'xml', 'xsd' },
-		-- event = 'BufEnter *.css,*.html,*.html4,*.xhtml,*.haml,*.twig,*.xml,*.xsd',
 		init = function()
 			vim.g.user_emmet_leader_key = ','
 			vim.g.user_emmet_settings = {
