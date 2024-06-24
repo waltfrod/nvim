@@ -35,7 +35,7 @@ function M.setup()
 	vim.o.termguicolors = true
 
 	-- Show special chars
-	vim.o.listchars = 'eol:$,tab:>>,trail:~,extends:❯,precedes:❮,space:·,nbsp:§,multispace:┄┄┄┊'
+	vim.o.listchars = 'eol:$,tab:↦ ,trail:~,extends:❯,precedes:❮,space:·,nbsp:§,multispace:┄┄┄┊'
 	vim.o.list = true
 
 	vim.o.magic = true
